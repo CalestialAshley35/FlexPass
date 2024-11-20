@@ -1,3 +1,4 @@
+![FlexPass](https://github.com/CalestialAshley35/FlexPass/blob/343f881d5cb943a333c0658936a804aa2e9e947f/download.png)
 # FlexPass - Ultimate Password Generator
 
 FlexPass is a user-friendly and powerful password generator that creates strong, random passwords with a combination of letters (uppercase and lowercase), numbers, special characters, emojis, and kaomojis. It also allows users to copy generated passwords and save them locally for future use.
