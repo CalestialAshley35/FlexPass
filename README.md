@@ -10,6 +10,10 @@ FlexPass is a user-friendly and powerful password generator that creates strong,
 - **Save Passwords**: Save your generated passwords locally using the browser's `localStorage`.
 - **View Saved Passwords**: See a list of your saved passwords directly in the app.
 
+## 📱 PassDB
+PassDB is an Powerful Libary for Stpring Passwords and Download as .passdatabase 
+Click button "Try PassDB" to try it and Type command `#passdb connect` to Connect PassDB Tye `#savedb password:<password>` to Save an Password to the Database Type `#passwords` to See all Passwords Created 
+Type `#download passdb` to Download ot as .passdatabase 
 ## 🤖 Live Demo
 
 You can try the FlexPass Password Generator live at:  
