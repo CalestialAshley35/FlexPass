@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PassDB Terminal</title>
+  <style>
+    body {
+      font-family: monospace;
+      background-color: #000;
+      color: #00ff00;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .terminal {
+      background-color: #111;
+      border-radius: 5px;
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .output {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #333;
+      margin-bottom: 10px;
+    }
+
+    .input-wrapper {
+      display: flex;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #333;
+      outline: none;
+      font-family: monospace;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #00ff00;
+      color: #000;
+      border: none;
+      font-family: monospace;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #00cc00;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="output" id="output">Welcome to PassDB Terminal</div>
+    <div class="input-wrapper">
+      <input type="text" id="commandInput" placeholder="Type your command here...">
+      <button onclick="processCommand()">Run</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize PassDB
+    const passDB = JSON.parse(localStorage.getItem('passDB')) || [];
+
+    function processCommand() {
+      const commandInput = document.getElementById('commandInput');
+      const output = document.getElementById('output');
+      const command = commandInput.value.trim();
+      let response = "";
+
+      if (command.startsWith("#passdb connect")) {
+        response = "Connected to PassDB.";
+      } else if (command.startsWith("#savedb password:")) {
+        // Extract password from the command
+        const password = command.replace("#savedb password:", "").trim();
+        if (password) {
+          passDB.push({ password });
+          localStorage.setItem('passDB', JSON.stringify(passDB));
+          response = `Password saved to PassDB: "${password}"`;
+        } else {
+          response = "Invalid command. Use: #savedb password:<your password>";
+        }
+      } else if (command === "#passwords") {
+        if (passDB.length === 0) {
+          response = "No passwords found in PassDB.";
+        } else {
+          response = "Saved Passwords:\n";
+          passDB.forEach((item, index) => {
+            response += `${index + 1}. ${item.password}\n`;
+          });
+        }
+      } else if (command === "#download passdb") {
+        downloadPassDB();
+        response = "PassDB has been downloaded as a .passdatabase file.";
+      } else {
+        response = "Unknown command. Try '#passdb connect', '#savedb password:<password>', '#passwords', or '#download passdb'.";
+      }
+
+      // Display the response in the output area
+      output.innerHTML += `\n> ${command}\n${response}`;
+      output.scrollTop = output.scrollHeight; // Scroll to the latest message
+      commandInput.value = ""; // Clear the input field
+    }
+
+    function downloadPassDB() {
+      const dataStr = JSON.stringify(passDB, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'passDB.passdatabase';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
